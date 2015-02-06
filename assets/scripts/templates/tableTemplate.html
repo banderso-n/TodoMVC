@@ -1,0 +1,36 @@
+<table>
+    <thead>
+        <tr>
+            <th>
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Controls
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each taskModels}}
+            <tr>
+                <td>
+                    <input type="checkbox" id="task_{{ id }}" {{#if isComplete}}checked{{/if}} data-table-role="checkbox" data-table-task-id="{{ id }}" />
+                </td>
+                <td {{#if isComplete}}style="text-decoration: line-through;"{{/if}}>
+                    {{ description }}
+                </td>
+                <td>
+                    <button data-table-role="removeButton" data-table-task-id="{{ id }}">Remove</button>
+                </td>
+            </tr>
+        {{/each}}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td></td>
+            <td>{{ incompleteCount }} items left</td>
+            <td></td>
+        </tr>
+    </tfoot>
+</table>

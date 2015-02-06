@@ -1,43 +1,46 @@
 define(function (require) {
     'use strict';
 
+    // Third party libs and polyfills
+    require('polyfills/Array.prototype.find');
     var $ = require('jquery');
+    var EventEmitter = require('EventEmitter');
+
+    // Views
     var FormView = require('views/FormView');
-    var CollectionView = require('views/CollectionView');
-    var CounterView = require('views/CounterView');
-    var ItemView = require('views/ItemView');
+    var TableView = require('views/TableView');
 
 
     function TodosController (taskRepository) {
 
         this.taskRepository = taskRepository;
 
-        this.taskModels = taskRepository.getAll();
+        this.eventEmitter = new EventEmitter();
 
-        this.collectionView = null;
-
-        this.counterView = null;
+        this.tableView = null;
 
         this.taskInputFormView = null;
 
-        this.handleCollectionViewAdd = this.handleCollectionViewAdd.bind(this);
-        this.handleItemViewRemoveRequest = this.handleItemViewRemoveRequest.bind(this);
-        this.handleItemViewToggleRequest = this.handleItemViewToggleRequest.bind(this);
+        this.taskModels = taskRepository.getAll();
+
+        this.handleTaskRemoveClick = this.handleTaskRemoveClick.bind(this);
+        this.handleTaskCheckedToggle = this.handleTaskCheckedToggle.bind(this);
         this.handleTaskInputFormViewSubmit = this.handleTaskInputFormViewSubmit.bind(this);
+        this.handleTaskModelsChangeForTableView = this.handleTaskModelsChangeForTableView.bind(this);
 
         this.init();
     }
 
 
-    TodosController.prototype.init = function () {
-        var $collectionView = $('#js-collectionView');
-        if ($collectionView.length !== 0) {
-            this._initializeCollectionView($collectionView);
-        }
+    TodosController.EVENT = {
+        TASK_MODELS_CHANGE: 'TodosController:taskModelsChange'
+    };
 
-        var $counterView = $('#js-counterView');
-        if ($counterView.length !== 0) {
-            this._initializeCounterView($counterView);
+
+    TodosController.prototype.init = function () {
+        var $tableView = $('#js-tableView');
+        if ($tableView.length !== 0) {
+            this._initializeTableView($tableView);
         }
 
         var $taskInputFormView = $('#js-taskInputFormView');
@@ -47,47 +50,43 @@ define(function (require) {
     };
 
 
-    TodosController.prototype._initializeCollectionView = function ($element) {
-        this.collectionView = new CollectionView($element);
-        this.collectionView.eventEmitter.on(CollectionView.EVENT.ADD, this.handleCollectionViewAdd);
-        this.taskModels.forEach(function (taskModel) {
-            var itemView = new ItemView(undefined, taskModel);
-            this.collectionView.add(itemView);
-        }, this);
-    };
-
-
-    TodosController.prototype._initializeCounterView = function ($element) {
-        this.counterView = new CounterView($element, this.taskModels);
-        this.counterView.render();
+    TodosController.prototype._initializeTableView = function ($element) {
+        this.tableView = new TableView($element);
+        this.tableView.render(this.taskModels);
+        this.tableView.eventEmitter.on(TableView.EVENT.TASK_CHECKED_TOGGLE, this.handleTaskCheckedToggle);
+        this.tableView.eventEmitter.on(TableView.EVENT.TASK_REMOVE_CLICK, this.handleTaskRemoveClick);
+        this.eventEmitter.on(TodosController.EVENT.TASK_MODELS_CHANGE, this.handleTaskModelsChangeForTableView);
     };
 
 
     TodosController.prototype._initializeTaskInputFormView = function ($element) {
         this.taskInputFormView = new FormView($element);
         this.taskInputFormView.eventEmitter.on(FormView.EVENT.SUBMIT, this.handleTaskInputFormViewSubmit);
-    }
-
-
-    TodosController.prototype.handleCollectionViewAdd = function (target, itemView) {
-        itemView.eventEmitter.on(ItemView.EVENT.REMOVE_REQUEST, this.handleItemViewRemoveRequest);
-        itemView.eventEmitter.on(ItemView.EVENT.TOGGLE_REQUEST, this.handleItemViewToggleRequest);
     };
 
 
-    TodosController.prototype.handleItemViewToggleRequest = function (itemView, isComplete) {
-        itemView.model.isComplete = isComplete;
-        this.taskRepository.update(itemView.model);
-        itemView.render();
-        this.counterView.render();
+    TodosController.prototype.handleTaskModelsChangeForTableView = function () {
+        this.tableView.render(this.taskModels);
     };
 
 
-    TodosController.prototype.handleItemViewRemoveRequest = function (itemView) {
-        this.taskRepository.delete(itemView.model);
-        this.taskModels.splice(this.taskModels.indexOf(itemView.model), 1);
-        this.collectionView.remove(itemView);
-        this.counterView.render();
+    TodosController.prototype.handleTaskCheckedToggle = function (id, isComplete) {
+        var taskModel = this.taskModels.find(function (taskModel) {
+            return taskModel.id === id;
+        });
+        taskModel.isComplete = isComplete;
+        this.taskRepository.update(taskModel);
+        this.eventEmitter.trigger(TodosController.EVENT.TASK_MODELS_CHANGE);
+    };
+
+
+    TodosController.prototype.handleTaskRemoveClick = function (id) {
+        var taskModel = this.taskModels.find(function (taskModel) {
+            return taskModel.id === id;
+        });
+        this.taskRepository.delete(taskModel);
+        this.taskModels.splice(this.taskModels.indexOf(taskModel), 1);
+        this.eventEmitter.trigger(TodosController.EVENT.TASK_MODELS_CHANGE);
     };
 
 
@@ -97,9 +96,8 @@ define(function (require) {
         }
         var taskModel = this.taskRepository.create(data);
         this.taskModels.push(taskModel);
-        this.collectionView.add(new ItemView(undefined, taskModel));
-        this.counterView.render();
         this.taskInputFormView.reset();
+        this.eventEmitter.trigger(TodosController.EVENT.TASK_MODELS_CHANGE);
     };
 
 
