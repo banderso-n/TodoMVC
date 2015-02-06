@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Todos</title>
+</head>
+<body>
+
+    <h1>Todos</h1>
+
+    <form id="js-taskInputFormView">
+        <h2>Add a task</h2>
+        <label for="task-description">Enter a description</label>
+        <input type="text" name="description" id="task-description" />
+        <input type="submit" />
+    </form>
+
+    <section>
+        <h2>Todo List</h2>
+
+        <table id="js-collectionView">
+            <thead>
+                <tr>
+                    <th>
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        Controls
+                    </th>
+                </tr>
+            </thead>
+            <tbody data-collection-role="collection">
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td></td>
+                    <td><span id="js-counterView">0</span> items left</td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+    </section>
+
+    <script src="bower_components/requirejs/require.js"></script>
+    <script>
+        require.config({
+            baseUrl: 'assets/scripts',
+
+            paths: {
+                'EventEmitter': '../../bower_components/EventEmitter.js/EventEmitter.min',
+                'Handlebars': '../../bower_components/handlebars/handlebars.min',
+                'jquery': '../../bower_components/jquery/dist/jquery.min',
+                'jquery-deparam': '../../bower_components/jquery-deparam/jquery-deparam.min',
+                'text': '../../bower_components/requirejs-text/text'
+            }
+        });
+
+        require(['main']);
+    </script>
+</body>
+</html>
