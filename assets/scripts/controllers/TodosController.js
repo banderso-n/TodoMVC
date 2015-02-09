@@ -4,9 +4,9 @@ define(function (require) {
     // Third party libs and polyfills
     require('polyfills/Array.prototype.find');
     var $ = require('jquery');
-    var EventEmitter = require('EventEmitter');
 
     // Views
+    var AnalyticsView = require('views/AnalyticsView');
     var FormView = require('views/FormView');
     var TableView = require('views/TableView');
 
@@ -15,7 +15,7 @@ define(function (require) {
 
         this.taskRepository = taskRepository;
 
-        this.eventEmitter = new EventEmitter();
+        this.analyticsView = null;
 
         this.tableView = null;
 
@@ -26,18 +26,17 @@ define(function (require) {
         this.handleTaskRemoveClick = this.handleTaskRemoveClick.bind(this);
         this.handleTaskCheckedToggle = this.handleTaskCheckedToggle.bind(this);
         this.handleTaskInputFormViewSubmit = this.handleTaskInputFormViewSubmit.bind(this);
-        this.handleTaskModelsChangeForTableView = this.handleTaskModelsChangeForTableView.bind(this);
 
         this.init();
     }
 
 
-    TodosController.EVENT = {
-        TASK_MODELS_CHANGE: 'TodosController:taskModelsChange'
-    };
-
-
     TodosController.prototype.init = function () {
+        var $analyticsView = $('#js-analyticsView');
+        if ($analyticsView.length !== 0) {
+            this._initializeAnalyticsView($analyticsView);
+        }
+
         var $tableView = $('#js-tableView');
         if ($tableView.length !== 0) {
             this._initializeTableView($tableView);
@@ -50,12 +49,23 @@ define(function (require) {
     };
 
 
+    TodosController.prototype._initializeAnalyticsView = function ($element) {
+        this.analyticsView = new AnalyticsView($element);
+        this.analyticsView.render(this.taskModels);
+    };
+
+
     TodosController.prototype._initializeTableView = function ($element) {
         this.tableView = new TableView($element);
         this.tableView.render(this.taskModels);
         this.tableView.eventEmitter.on(TableView.EVENT.TASK_CHECKED_TOGGLE, this.handleTaskCheckedToggle);
         this.tableView.eventEmitter.on(TableView.EVENT.TASK_REMOVE_CLICK, this.handleTaskRemoveClick);
-        this.eventEmitter.on(TodosController.EVENT.TASK_MODELS_CHANGE, this.handleTaskModelsChangeForTableView);
+    };
+
+
+    TodosController.prototype.updateViews = function () {
+        this.tableView.render(this.taskModels);
+        this.analyticsView.render(this.taskModels);
     };
 
 
@@ -65,18 +75,13 @@ define(function (require) {
     };
 
 
-    TodosController.prototype.handleTaskModelsChangeForTableView = function () {
-        this.tableView.render(this.taskModels);
-    };
-
-
     TodosController.prototype.handleTaskCheckedToggle = function (id, isComplete) {
         var taskModel = this.taskModels.find(function (taskModel) {
             return taskModel.id === id;
         });
         taskModel.isComplete = isComplete;
         this.taskRepository.update(taskModel);
-        this.eventEmitter.trigger(TodosController.EVENT.TASK_MODELS_CHANGE);
+        this.updateViews();
     };
 
 
@@ -86,7 +91,7 @@ define(function (require) {
         });
         this.taskRepository.delete(taskModel);
         this.taskModels.splice(this.taskModels.indexOf(taskModel), 1);
-        this.eventEmitter.trigger(TodosController.EVENT.TASK_MODELS_CHANGE);
+        this.updateViews();
     };
 
 
@@ -97,7 +102,7 @@ define(function (require) {
         var taskModel = this.taskRepository.create(data);
         this.taskModels.push(taskModel);
         this.taskInputFormView.reset();
-        this.eventEmitter.trigger(TodosController.EVENT.TASK_MODELS_CHANGE);
+        this.updateViews();
     };
 
 
