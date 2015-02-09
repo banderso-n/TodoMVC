@@ -34,6 +34,11 @@ define(function (require) {
     }
 
 
+    TaskModel.isCompleteEvaluator = function (taskModel) {
+        return taskModel.isComplete === true;
+    };
+
+
     TaskModel.prototype.fromJSON = function (json) {
         this.description = (json.description !== undefined) ? json.description : this.description;
         this.id = (json.id !== undefined) ? json.id : this.id;

@@ -1,10 +1,14 @@
 define(function (require) {
     'use strict';
 
+    // Libs and helpers
     var $ = require('jquery');
     var EventEmitter = require('EventEmitter');
     var Handlebars = require('Handlebars');
     var template = require('text!templates/tableTemplate.html');
+
+    // Models
+    var TaskModel = require('models/TaskModel');
 
 
     function TableView ($element) {
@@ -25,11 +29,6 @@ define(function (require) {
     TableView.$empty = $();
 
     TableView.template = Handlebars.compile(template);
-
-    TableView.incompleteEvaluator = function (taskModel) {
-        return taskModel.isComplete === false;
-    };
-
 
     TableView.DATA_ATTRIBUTE = {
         TASK_ID: 'table-task-id'
@@ -62,13 +61,13 @@ define(function (require) {
 
 
     TableView.prototype.render = function (taskModels) {
-        var data = {
+        var templateData = {
             taskModels: taskModels,
-            incompleteCount: taskModels.filter(TableView.incompleteEvaluator).length
+            incompleteCount: taskModels.length - taskModels.filter(TaskModel.isCompleteEvaluator).length
         };
         this.disable();
         this.$element.empty();
-        this.$element.html(TableView.template(data));
+        this.$element.html(TableView.template(templateData));
         this.updateDOMProperties();
         this.enable();
         return this;
