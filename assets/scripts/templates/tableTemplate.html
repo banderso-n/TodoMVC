@@ -1,9 +1,9 @@
-<table>
+<table class="table">
     <thead>
         <tr>
             <th>
             </th>
-            <th>
+            <th class="table-data-full-width">
                 Description
             </th>
             <th>
@@ -17,11 +17,11 @@
                 <td>
                     <input type="checkbox" id="task_{{ id }}" {{#if isComplete}}checked{{/if}} data-table-role="checkbox" data-table-task-id="{{ id }}" />
                 </td>
-                <td {{#if isComplete}}style="text-decoration: line-through;"{{/if}}>
+                <td class="{{#if isComplete}}text-muted{{/if}}">
                     {{ description }}
                 </td>
                 <td>
-                    <button data-table-role="removeButton" data-table-task-id="{{ id }}">Remove</button>
+                    <button class="btn btn-danger btn-xs" data-table-role="removeButton" data-table-task-id="{{ id }}">Remove</button>
                 </td>
             </tr>
         {{/each}}
@@ -29,7 +29,7 @@
     <tfoot>
         <tr>
             <td></td>
-            <td>{{ incompleteCount }} items left</td>
+            <td><span class="text-info">{{ incompleteCount }} items left</span></td>
             <td></td>
         </tr>
     </tfoot>
