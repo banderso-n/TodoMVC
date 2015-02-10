@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+
+        <title>MVC Primer</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <link rel="stylesheet" href="../bower_components/reveal-js/css/reveal.min.css">
+        <link rel="stylesheet" href="../bower_components/reveal-js/css/theme/default.css" id="theme">
+    </head>
+
+    <body>
+        <div class="reveal">
+
+            <div class="slides">
+                <section>
+                    <h1>Everything you always wanted to know about MVC*</h1>
+                    <h3>*But were afraid to ask</h3>
+                </section>
+
+                <section>
+                    <h2>What it is</h2>
+
+                    <ul>
+                        <li>Just an architectural pattern</li>
+                        <li>A way to separate concerns</li>
+                        <li>Object-oriented</li>
+                    </ul>
+
+                    <aside class="notes">
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>What it isn't</h2>
+
+                    <ul>
+                        <li>
+                            The ultimate end-all, be-all architecture
+                            <ul>
+                                <li>MVC is good for any project where it makes sense to separate your GUI logic from your data logic, e.g. CRUD apps</li>
+                            </ul>
+                        </li>
+                        <li>
+                            1:1:1
+                            <ul>
+                                <li>You won't necessarily have one model, one view, and one controller for your entire app</li>
+                                <li>Each "concept" doesn't need a model, view, and controller, e.g. <code>CityModel, CityView, CityController</code></li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <aside class="notes">
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Models</h2>
+
+                    <ul>
+                        <li>Raw data</li>
+                        <li>Predictable data format</li>
+                        <li>Unaware of views or controllers</li>
+                        <li>Unaware of other models (but it can have child models)</li>
+                        <li>
+                            If they have methods, they just mutate the data in helpful ways
+                            <ul>
+                                <li>e.g. sorting, filtering, converting to/from JSON, etc</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Models</h2>
+                    <img src="images/city-models.gif" alt />
+                </section>
+
+                <section>
+                    <h2>Views</h2>
+
+                    <ul>
+                        <li>Concerned with visual representation only</li>
+                        <li>Handles DOM manipulation</li>
+                        <li>Should be self-contained and concerned with specific behaviors, e.g. a carousel</li>
+                        <li>Might be renderable, might not be</li>
+                    </ul>
+
+                </section>
+
+                <section>
+                    <h2>Views</h2>
+                    <img src="images/map-view.jpg" alt />
+                </section>
+
+                <section>
+                    <h2>Controllers</h2>
+
+                    <ul>
+                        <li>The brains of the operation (the decision makers)</li>
+                        <li>Aware of models and views</li>
+                        <li>When a model changes, it updates the appropriate views</li>
+                        <li>When a user manipulates a view, it updates the appropriate models</li>
+                    </ul>
+
+                    <img src="images/controller.jpg" alt width="300" />
+                </section>
+
+                <section>
+                    <h2>Bonus! Repositories (RMVC?)</h2>
+
+                    <ul>
+                        <li>Handles sending and receiving data to and from remote locations</li>
+                        <li>Data could be coming from a database, an external API, a local JSON file, localStorage, etc.</li>
+                    </ul>
+
+                    <img src="images/mr-zip.jpg" alt />
+                </section>
+
+                <section>
+                    <h2>Let's look at some code!</h2>
+                </section>
+
+                <section>
+                    <h2>Popular MVC libraries</h2>
+
+                    <ul>
+                        <li>
+                            Angular
+                            <ul>
+                                <li>Two-way data-binding</li>
+                                <li>Pro: it handles pretty much everything for you</li>
+                                <li>Con: it handles pretty much everything for you</li>
+                            </ul>
+                        </li>
+                        <li>
+                            Flux (pattern)
+                            <ul>
+                                <li>Not technically MVC (but basically MVC)</li>
+                                <li>Store (Model), View (View), Dispatcher (Controller)</li>
+                                <li>
+                                    Two-way data-binding is forbidden
+                                    <ul>
+                                        <li>"unidirectional data flow"</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            Backbone
+                            <ul>
+                                <li>Models trigger "change" events</li>
+                                <li>Model, (Collection,) and View base classes</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Additional resources</h2>
+
+                    <ul>
+                        <li>TodoMVC: <a href="http://todomvc.com/" target="_blank">todomvc.com</a></li>
+                        <li>This random codepen: <a href="http://codepen.io/anon/pen/eqnsi" target="_blank">http://codepen.io/anon/pen/eqnsi</a></li>
+                        <li>Learning JavaScript Design Patterns: <a href="http://addyosmani.com/resources/essentialjsdesignpatterns/" target="_blank">http://addyosmani.com/resources/essentialjsdesignpatterns/</a></li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h1>THE END</h1>
+                </section>
+
+            </div>
+
+        </div>
+
+        <script src="../bower_components/reveal-js/lib/js/head.min.js"></script>
+        <script src="../bower_components/reveal-js/js/reveal.min.js"></script>
+
+        <script>
+
+            // Full list of configuration options available here:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: false,
+                progress: true,
+                history: true,
+                center: true,
+
+                // Parallax scrolling
+                // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+                // parallaxBackgroundSize: '2100px 900px',
+
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: '../bower_components/reveal-js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+                ]
+            });
+
+        </script>
+
+    </body>
+</html>
