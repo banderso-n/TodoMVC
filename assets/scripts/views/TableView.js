@@ -75,8 +75,10 @@ define(function (require) {
 
 
     TableView.prototype.handleCheckboxChange = function (e) {
+        debugger;
         var taskId = $(e.currentTarget).data(TableView.DATA_ATTRIBUTE.TASK_ID);
-        this.eventEmitter.trigger(TableView.EVENT.TASK_CHECKED_TOGGLE, [ taskId, e.currentTarget.checked ]);
+        var isChecked = e.currentTarget.checked;
+        this.eventEmitter.trigger(TableView.EVENT.TASK_CHECKED_TOGGLE, [ taskId, isChecked ]);
     };
 
 

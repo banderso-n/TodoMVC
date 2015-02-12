@@ -135,6 +135,7 @@ define(function (require) {
      * @param  {Boolean} isChecked  Whether the task was checked or unchecked
      */
     TodosController.prototype.handleTaskCheckedToggle = function (id, isChecked) {
+        debugger;
         var taskModel = this.taskModels.find(function (taskModel) {
             return taskModel.id === id;
         });
