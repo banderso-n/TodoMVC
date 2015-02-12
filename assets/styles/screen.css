@@ -1,3 +1,7 @@
 .table-data-full-width {
     width: 100%;
 }
+
+.container_contained {
+    max-width: 500px;
+}
