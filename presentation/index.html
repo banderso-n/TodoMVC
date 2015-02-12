@@ -26,8 +26,7 @@
 
                     <ul>
                         <li>Just an architectural pattern</li>
-                        <li>A way to separate concerns</li>
-                        <li>Object-oriented</li>
+                        <li>A way to separate concerns (view logic from data logic)</li>
                     </ul>
 
                     <aside class="notes">
@@ -42,13 +41,6 @@
                             The ultimate end-all, be-all architecture
                             <ul>
                                 <li>MVC is good for any project where it makes sense to separate your GUI logic from your data logic, e.g. CRUD apps</li>
-                            </ul>
-                        </li>
-                        <li>
-                            1:1:1
-                            <ul>
-                                <li>You won't necessarily have one model, one view, and one controller for your entire app</li>
-                                <li>Each "concept" doesn't need a model, view, and controller, e.g. <code>CityModel, CityView, CityController</code></li>
                             </ul>
                         </li>
                     </ul>
@@ -75,11 +67,6 @@
                 </section>
 
                 <section>
-                    <h2>Models</h2>
-                    <img src="images/city-models.gif" alt />
-                </section>
-
-                <section>
                     <h2>Views</h2>
 
                     <ul>
@@ -88,12 +75,6 @@
                         <li>Should be self-contained and concerned with specific behaviors, e.g. a carousel</li>
                         <li>Might be renderable, might not be</li>
                     </ul>
-
-                </section>
-
-                <section>
-                    <h2>Views</h2>
-                    <img src="images/map-view.jpg" alt />
                 </section>
 
                 <section>
@@ -105,8 +86,6 @@
                         <li>When a model changes, it updates the appropriate views</li>
                         <li>When a user manipulates a view, it updates the appropriate models</li>
                     </ul>
-
-                    <img src="images/controller.jpg" alt width="300" />
                 </section>
 
                 <section>
@@ -121,19 +100,52 @@
                 </section>
 
                 <section>
-                    <h2>Let's look at some code!</h2>
+                    <h2>Another diagram</h2>
                 </section>
 
                 <section>
-                    <h2>Popular MVC libraries</h2>
+                    <h2>Another diagram</h2>
+                    <ul>
+                        <li>Checkbox triggers 'change' event</li>
+                        <li>TableView's 'change' event-handler is invoked</li>
+                        <li>Event-handler interprets 'change' event and broadcasts custom event + data</li>
+                        <li>Custom event is intercepted by controller</li>
+                        <li>Controller interprets custom event data</li>
+                        <li>Updates models</li>
+                        <li>Updates views</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>MV*</h2>
 
                     <ul>
                         <li>
-                            Angular
+                            MVP (Model View Presenter)
+                            <ul>
+                                <li>Views have little to no logic</li>
+                                <li>Presenter is a Controller that also handles GUI logic</li>
+                            </ul>
+                        </li>
+                        <li>
+                            MVVM (Model View ViewModel)
                             <ul>
                                 <li>Two-way data-binding</li>
-                                <li>Pro: it handles pretty much everything for you</li>
-                                <li>Con: it handles pretty much everything for you</li>
+                                <li>Additional concept of "Binders"</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Popular MV* frameworks</h2>
+
+                    <ul>
+                        <li>Knockout (MVVM)</li>
+                        <li>
+                            Angular (MVW (but really MVVM))
+                            <ul>
+                                <li>Two-way data-binding</li>
                             </ul>
                         </li>
                         <li>
@@ -156,6 +168,7 @@
                                 <li>Model, (Collection,) and View base classes</li>
                             </ul>
                         </li>
+                        <li>Ember ???</li>
                     </ul>
                 </section>
 
