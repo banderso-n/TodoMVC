@@ -25,8 +25,7 @@
                     <h2>What it is</h2>
 
                     <ul>
-                        <li>Just an architectural pattern</li>
-                        <li>A way to separate concerns (view logic from data logic)</li>
+                        <li>An architectural pattern that aims to keep the GUI logic separated from the business logic and the flow of data between the two is handled by an intermediary.</li>
                     </ul>
 
                     <aside class="notes">
@@ -162,14 +161,9 @@
                         <li>
                             Flux (pattern)
                             <ul>
-                                <li>Not technically MVC (but basically MVC)</li>
-                                <li>Store (Model), View (View), Dispatcher (Controller)</li>
-                                <li>
-                                    Two-way data-binding is forbidden
-                                    <ul>
-                                        <li>"unidirectional data flow"</li>
-                                    </ul>
-                                </li>
+                                <li>"Unidirectional data flow"</li>
+                                <li>Action -> Dispatcher -> Store -> View</li>
+                                <li>Two-way data-binding is forbidden (throws an error)</li>
                             </ul>
                         </li>
                         <li>
